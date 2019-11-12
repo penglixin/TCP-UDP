@@ -7,41 +7,41 @@
 
 int main()
 {
-	WORD wdVersion = MAKEWORD(2, 2); //Ö÷°æ±¾ºÅ´æÔÚµÍ8Î»£¬¸±°æ±¾ºÅ´æÔÚ¸ß8Î»
+	WORD wdVersion = MAKEWORD(2, 2); //ä¸»ç‰ˆæœ¬å·å­˜åœ¨ä½8ä½ï¼Œå‰¯ç‰ˆæœ¬å·å­˜åœ¨é«˜8ä½
 	//int a = *((char*)&wdVersion);
 	//int b = *((char*)&wdVersion + 1);
 	WSADATA wsaData;
 	int nRes = WSAStartup(wdVersion,&wsaData);
 	if (nRes != 0)
 	{
-		//ÍøÂç¿â¼ÓÔØÊ§°Ü
+		//ç½‘ç»œåº“åŠ è½½å¤±è´¥
 		switch (nRes)
 		{
 		case WSASYSNOTREADY:
-			printf("ÖØÆôµçÄÔ,»òÕß¼ì²éÍøÂç¿â");
+			printf("é‡å¯ç”µè„‘,æˆ–è€…æ£€æŸ¥ç½‘ç»œåº“");
 			break;
 		case WSAVERNOTSUPPORTED:
-			printf("Çë¸üĞÂÍøÂç¿â");
+			printf("è¯·æ›´æ–°ç½‘ç»œåº“");
 			break;
 		case WSAEINPROGRESS:
-			printf("ÖØĞÂÆô¶¯³ÌĞò");
+			printf("é‡æ–°å¯åŠ¨ç¨‹åº");
 			break;
 		case WSAEPROCLIM:
-			printf("Çë³¢ÊÔ¹Ø±Õ²»±ØÒªµÄÈí¼ş,Îªµ±Ç°³ÌĞòÔËĞĞÌá¹©³ä×ã×ÊÔ´");
+			printf("è¯·å°è¯•å…³é—­ä¸å¿…è¦çš„è½¯ä»¶,ä¸ºå½“å‰ç¨‹åºè¿è¡Œæä¾›å……è¶³èµ„æº");
 			break;
 		case WSAEFAULT:
-			printf("º¯ÊıµÚ¶ş¸ö²ÎÊı´íÎó");
+			printf("å‡½æ•°ç¬¬äºŒä¸ªå‚æ•°é”™è¯¯");
 			break;
 		}
 		return 0;
 	}
-	//°æ±¾Ğ£Ñé
-	if (2 != HIBYTE(wsaData.wVersion) || 2 != LOBYTE(wsaData.wVersion)) //HIBYTEÊÇ¸ß8Î»£¬¸±°æ±¾ºÅ£»LOBYTEÊÇµÍ8Î»£¬Ö÷°æ±¾ºÅ
+	//ç‰ˆæœ¬æ ¡éªŒ
+	if (2 != HIBYTE(wsaData.wVersion) || 2 != LOBYTE(wsaData.wVersion)) //HIBYTEæ˜¯é«˜8ä½ï¼Œå‰¯ç‰ˆæœ¬å·ï¼›LOBYTEæ˜¯ä½8ä½ï¼Œä¸»ç‰ˆæœ¬å·
 	{
 		WSACleanup();
 		return 0;
 	}
-	//´´½¨socket
+	//åˆ›å»ºsocket
 	SOCKET socketServer = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (socketServer == INVALID_SOCKET)
 	{
@@ -49,7 +49,7 @@ int main()
 		WSACleanup();
 		return 0;
 	}
-	//°ó¶¨socket
+	//ç»‘å®šsocket
 	struct sockaddr_in Serveraddr;
 	Serveraddr.sin_family = AF_INET;
 	Serveraddr.sin_addr.S_un.S_addr = inet_addr("10.100.145.239");
@@ -61,7 +61,7 @@ int main()
 		WSACleanup();
 		return 0;
 	}
-	//¼àÌı
+	//ç›‘å¬
 	if (listen(socketServer, SOMAXCONN) == SOCKET_ERROR)
 	{
 		int errorCode = WSAGetLastError();
@@ -69,52 +69,50 @@ int main()
 		WSACleanup();
 		return 0;
 	}
-	//´´½¨¿Í»§¶ËÁ´½Óaccept
-	printf("µÈ´ı¿Í»§¶ËÁ¬½Ó......\n");
+	//åˆ›å»ºå®¢æˆ·ç«¯é“¾æ¥accept
+	printf("ç­‰å¾…å®¢æˆ·ç«¯è¿æ¥......\n");
 	SOCKADDR_IN Clientaddr;
 	int len = sizeof(Clientaddr);
-	SOCKET socketClient = accept(socketServer,(SOCKADDR*)&Clientaddr, &len); //ÕâÊÇÒ»¸ö×èÈûº¯Êı£¬Èç¹ûÃ»ÓĞ¿Í»§¶ËÁ¬½Ó£¬ÄÇÃ´³ÌĞòÒ»Ö±µÈ´ı¿Í»§¶ËÁ¬½Ó£¬²»»áÍùÏÂÖ´ĞĞ
+	SOCKET socketClient = accept(socketServer,(SOCKADDR*)&Clientaddr, &len); //è¿™æ˜¯ä¸€ä¸ªé˜»å¡å‡½æ•°ï¼Œå¦‚æœæ²¡æœ‰å®¢æˆ·ç«¯è¿æ¥ï¼Œé‚£ä¹ˆç¨‹åºä¸€ç›´ç­‰å¾…å®¢æˆ·ç«¯è¿æ¥ï¼Œä¸ä¼šå¾€ä¸‹æ‰§è¡Œ
 	if (socketClient == INVALID_SOCKET)
 	{
-		printf("¿Í»§¶ËÁ¬½ÓÊ§°Ü£¡£¡£¡\n");
+		printf("å®¢æˆ·ç«¯è¿æ¥å¤±è´¥ï¼ï¼ï¼\n");
 		int errorCode = WSAGetLastError();
 		closesocket(socketServer);
 		WSACleanup();
 		return 0;
 	}
-	printf("¿Í»§¶ËÁ¬½Ó³É¹¦£¡\n");
+	printf("å®¢æˆ·ç«¯è¿æ¥æˆåŠŸï¼\n");
 
-	if (send(socketClient, "ÎÒÊÇ·şÎñÆ÷,ÊÕµ½ÁËÄãµÄÁ¬½Ó\n", sizeof("ÎÒÊÇ·şÎñÆ÷,ÊÕµ½ÁËÄãµÄÁ¬½Ó"), 0) == SOCKET_ERROR)
+	if (send(socketClient, "æˆ‘æ˜¯æœåŠ¡å™¨,æ”¶åˆ°äº†ä½ çš„è¿æ¥\n", sizeof("æˆ‘æ˜¯æœåŠ¡å™¨,æ”¶åˆ°äº†ä½ çš„è¿æ¥"), 0) == SOCKET_ERROR)
 	{
 		int errorcode = WSAGetLastError();
 	}
 	while (1)
 	{
-		//½ÓÊÕÏûÏ¢
+		//æ¥æ”¶æ¶ˆæ¯
 		char buf[1500] = { 0 };
 		int res = recv(socketClient, buf, 1499, 0);
-		if (res == 0)  //ÕâÒ²ÊÇÒ»¸ö×èÈûº¯Êı£¬µ±¿Í»§¶ËÃ»ÓĞsendÏûÏ¢µÄÊ±ºò»áÒ»Ö±×èÈûÔÚÕâĞĞ´úÂë£¬µ±¿Í»§¶ËµôÏßÔò·µ»Ø0;Õı³£½ÓÊÕÔò·µ»Ø½ÓÊÕµ½µÄ×Ö·ûÊı×éµÄ³¤¶È£»Ö´ĞĞÊ§°Ü·µ»ØSOCKET_ERROR;
+		if (res == 0)  //è¿™ä¹Ÿæ˜¯ä¸€ä¸ªé˜»å¡å‡½æ•°ï¼Œå½“å®¢æˆ·ç«¯æ²¡æœ‰sendæ¶ˆæ¯çš„æ—¶å€™ä¼šä¸€ç›´é˜»å¡åœ¨è¿™è¡Œä»£ç ï¼Œå½“å®¢æˆ·ç«¯æ‰çº¿åˆ™è¿”å›0;æ­£å¸¸æ¥æ”¶åˆ™è¿”å›æ¥æ”¶åˆ°çš„å­—ç¬¦æ•°ç»„çš„é•¿åº¦ï¼›æ‰§è¡Œå¤±è´¥è¿”å›SOCKET_ERROR;
 		{
-			printf("¿Í»§¶ËÁ¬½ÓÖĞ¶Ï¡£¡£¡£");
+			printf("å®¢æˆ·ç«¯è¿æ¥ä¸­æ–­ã€‚ã€‚ã€‚");
 		}
 		else if (res == SOCKET_ERROR)
 		{
 			int errorcode = WSAGetLastError();
-			printf("server½ÓÊÕ³ö´í¡£¡£¡£");
+			printf("serveræ¥æ”¶å‡ºé”™ã€‚ã€‚ã€‚");
 		}
 		else
 		{
-			printf("ÏûÏ¢³¤¶È£º%d£¬ÏûÏ¢ÄÚÈİ£º%s\n", res, buf);
+			printf("æ¶ˆæ¯é•¿åº¦ï¼š%dï¼Œæ¶ˆæ¯å†…å®¹ï¼š%s\n", res, buf);
 		}
-		//·¢ËÍÏûÏ¢
+		//å‘é€æ¶ˆæ¯
 		scanf("%s", buf);
-		if (send(socketClient,buf, strlen(buf), 0) == SOCKET_ERROR)  //Ö´ĞĞ³É¹¦·µ»ØÖµ>0£¬·¢ËÍ×Ö·ûµÄ³¤¶È£»Ê§°Ü·µ»ØSOCKET_ERROR
+		if (send(socketClient,buf, strlen(buf), 0) == SOCKET_ERROR)  //æ‰§è¡ŒæˆåŠŸè¿”å›å€¼>0ï¼Œå‘é€å­—ç¬¦çš„é•¿åº¦ï¼›å¤±è´¥è¿”å›SOCKET_ERROR
 		{
 			int errorcode = WSAGetLastError();
 		}
 	}
-
-
 	closesocket(socketServer);
 	closesocket(socketClient);
 	WSACleanup();
